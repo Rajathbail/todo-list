@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
@@ -18,94 +18,63 @@
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat|Permanent+Marker" rel="stylesheet">
 
-  </head>
+</head>
 
-  <body>
-    
+<body>
+
     <nav class="navbar m-2">
-		<a class="navbar-brand" href="#">
-			<img src="assets/togdot.svg" height="60" class="d-inline-block align-top" alt="">
-		</a>
-		<h4 class="nav-title">^_^</h4>
-		<a href="#">
-			<img src="assets/hamburger.svg" height="45" class="d-inline-block align-top" alt="">
-		</a>
-	</nav>
+        <a class="navbar-brand" href="#">
+            <img src="assets/togdot.svg" height="60" class="d-inline-block align-top" alt="">
+        </a>
+        <h4 class="nav-title">^_^</h4>
+        <a href="#">
+            <img src="assets/hamburger.svg" height="45" class="d-inline-block align-top" alt="">
+        </a>
+    </nav>
 
-	<div class="container paper mt-3">
-	    
-	    <h1 class="page-title"> Ninja Todo </h1>
+    <div class="container paper mt-3">
 
-	    <form class="form-inline justify-content-md-center">
-  			<div class="input-group">
-      			<input type="text" class="form-control" placeholder="Add a new item" aria-label="add-item">
-      			<span class="input-group-btn">
-        			<button class="btn btn-success" type="button"> + </button>
-      			</span>
-    		</div>
-		</form>
+        <h1 class="page-title"> Ninja Todo </h1>
 
-	    <!-- Open items -->
+        <form class="form-inline justify-content-md-center">
+            <div class="input-group">
+                <input id="new-task" type="text" class="form-control" placeholder="Add a new item" aria-label="add-item">
+                <span class="input-group-btn">
+                    <button class="btn btn-success" type="button" onclick="addTodo('new-task')"> + </button>
+                </span>
+            </div>
+        </form>
 
-	    <form class="ml-5 mt-5">
-	    	<div class="form-check">
-    			<label class="custom-control custom-checkbox" id="todo-1">
-					<input type="checkbox" class="custom-control-input">
-					<span class="custom-control-indicator"></span>
-					<span class="custom-control-description">Get groceries</span>
-				</label>
-  			</div>
+        <!-- Open items -->
 
-  			<div class="form-check">
-    			<label class="custom-control custom-checkbox" id="todo-2">
-					<input type="checkbox" class="custom-control-input">
-					<span class="custom-control-indicator"></span>
-					<span class="custom-control-description">Sollicitudin Justo Amet Vulputate</span>
-				</label>
-  			</div>
+        <form class="ml-5 mt-5">
+            <ul id="open-items">
 
-  			<div class="form-check">
-    			<label class="custom-control custom-checkbox" id="todo-3">
-					<input type="checkbox" class="custom-control-input">
-					<span class="custom-control-indicator"></span>
-					<span class="custom-control-description">Sollicitudin Justo Amet Vulputate</span>
-				</label>
-  			</div>
-	    </form>
+            </ul>
+        <!-- Placeholder if empty -->
+            <h6 id="empty-placeholder" class=""> Your list is empty </h6>
+        </form>
 
-	    <!-- Closed items -->
+        <!-- Check box to hide closed items -->
+        <form class="ml-5 mt-5 hide" id="hide-block">
+            <label class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="show-checkbox" onchange="hideUnhideCompleted()" >
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description"> Hide Completed </span>
+            </label>
+        </form>
 
-	    <form class="ml-5 mt-5 completed">
-	    	<div class="form-check">
-    			<label class="custom-control custom-checkbox" id="todo-4">
-					<input type="checkbox" class="custom-control-input" checked>
-					<span class="custom-control-indicator"></span>
-					<span class="custom-control-description">Get groceries</span>
-				</label>
-  			</div>
+        <!-- Closed items -->
 
-  			<div class="form-check">
-    			<label class="custom-control custom-checkbox" id="todo-5">
-					<input type="checkbox" class="custom-control-input" checked>
-					<span class="custom-control-indicator"></span>
-					<span class="custom-control-description">Sollicitudin Justo Amet Vulputate</span>
-				</label>
-  			</div>
-
-  			<div class="form-check">
-    			<label class="custom-control custom-checkbox" id="todo-6">
-					<input type="checkbox" class="custom-control-input" checked>
-					<span class="custom-control-indicator"></span>
-					<span class="custom-control-description">Sollicitudin Justo Amet Vulputate</span>
-				</label>
-  			</div>
-	    </form>
-
-	</div>
-
-
-
+        <form class="ml-5 mt-5 completed">
+            <ul id="closed-items">
+            </ul>
+        </form>
 
     </div>
-  </body>
+
+</div>
+
+<script src="js/script.js" />
+</body>
 </html>
