@@ -49,15 +49,15 @@
 
         <form class="ml-5 mt-5">
             <ul id="open-items">
-
             </ul>
-        <!-- Placeholder if empty -->
-            <h6 id="empty-placeholder" class=""> Your list is empty </h6>
         </form>
 
+        <!-- Placeholder if empty -->
+        <h4 id="empty-placeholder" class="placeholder-text"> Your list is empty </h4>
+
         <!-- Check box to hide closed items -->
-        <form class="ml-5 mt-5 hide" id="hide-block">
-            <label class="custom-control custom-checkbox">
+        <form class="hide hide-completed-toggle" id="hide-block">
+            <label class="m-4 custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" id="show-checkbox" onchange="hideUnhideCompleted()" >
                 <span class="custom-control-indicator"></span>
                 <span class="custom-control-description"> Hide Completed </span>
@@ -76,5 +76,6 @@
 </div>
 
 <script src="js/script.js" />
+
 </body>
 </html>

@@ -1,43 +1,15 @@
 //var listNum = 0;
-var openListPrefix = "list-";
-var closedListPrefix = "completed-";
-var inputPrefix = "inp-";
+var openListPrefix = "list-",
+    closedListPrefix = "completed-",
+    inputPrefix = "inp-";
 
-var hideCompleted = false;
+var todoList = [],
+    closedTodoList = []
 
-var todoList = [
-    {
-        id: 1,
-        todoText: "lot's to do",
-        completed: false
-    },
-    {
-        id: 2,
-        todoText: "more to do",
-        completed: false
-    },
-    {
-        id: 3,
-        todoText: "almost done",
-        completed: false
-    }
-]
+//Show placeholder if needed
+showPlaceholderIfNeeded();
 
-var closedTodoList = [
-    {
-        id: 4,
-        todoText: "This I did first",
-        completed: true
-    },
-    {
-        id: 5,
-        todoText: "then this",
-        completed: true
-    }
-]
-
-showListEmpty();
-
+//Populate from db
 for (var i = todoList.length - 1; i>=0; i--){
     addListItem("open-items", todoList[i].todoText, todoList[i]["id"])
 }
@@ -46,31 +18,35 @@ for (var i = closedTodoList.length - 1; i>=0; i--){
     addListItem("closed-items", closedTodoList[i].todoText, closedTodoList[i]["id"])
 }
 
+//Add button handler
 function addTodo(id){
     var ele = document.getElementById(id)
-    console.log("The text of the input element is " + ele.value);
+    //console.log("The text of the input element is " + ele.value);
+    if (!ele.value) {
+        return false;
+    }
     addListItem("open-items", ele.value, Date.now());
     todoList.unshift({
         id: Date.now(),
         todoText: ele.value,
         completed: false
     })
-    showListEmpty();
+    showPlaceholderIfNeeded();
     return false;
 }
 
 function addListItem(listName, todoText, id){
         var todoListUlNode = document.getElementById(listName);
-        if(listName == "open-items"){
+        if (listName == "open-items") {
             var checked = "";
             var idText = openListPrefix;
-        }else{
+        } else {
             var checked = "checked";
             var idText = closedListPrefix;
         }
         var segment =
             '<label class="custom-control custom-checkbox">' +
-                '<input type="checkbox" class="custom-control-input" id="inp-'+ id +'" onchange=\'justChecked("' + listName + '", "' + idText + id + '")\' ' + checked + '>' +
+                '<input type="checkbox" class="custom-control-input" id="inp-'+ id +'" onchange=\'justChecked("' + listName + '", "' + id + '")\' ' + checked + '>' +
                 '<span class="custom-control-indicator"></span>' +
                 '<span class="custom-control-description">' + todoText +'</span>' +
             '</label>'+
@@ -83,12 +59,11 @@ function addListItem(listName, todoText, id){
         li.setAttribute("class", "form-check");
         li.setAttribute("id", idText+id)
 
-        if (todoListUlNode.firstChild){
+        if (todoListUlNode.firstChild) {
             todoListUlNode.insertBefore(li, todoListUlNode.firstChild);
         } else {
             todoListUlNode.appendChild(li);
         }
-
 }
 
 function removeItem(listName, id) {
@@ -98,7 +73,7 @@ function removeItem(listName, id) {
         len,
         killList;
 
-    if (listName == "open-items"){
+    if (listName == "open-items") {
         len = todoList.length;
         killList = todoList;
         idText = openListPrefix;
@@ -112,13 +87,12 @@ function removeItem(listName, id) {
     todoListUlNode.removeChild(el);
 
     for (var i = 0; i<len; i++){
-        if(killList[i].id == id){
+        if (killList[i].id == id) {
             killList.splice(i,1);
             break;
         }
     }
-
-    showListEmpty();
+    showPlaceholderIfNeeded();
 }
 
 function justChecked(listName, id){
@@ -130,7 +104,7 @@ function justChecked(listName, id){
     var otherListName = (listName == "open-items")? "closed-items" : "open-items";
 
     for (var i = 0, len = srcList.length; i<len; i++){
-        if((idText + srcList[i].id) == id){
+        if((srcList[i].id) == id){
             dstList.unshift(srcList[i]);
             removeItem(listName, id);
             addListItem(otherListName, dstList[0].todoText, dstList[0]["id"]);
@@ -155,7 +129,7 @@ function hideUnhideCompleted(){
     }
 }
 
-function showListEmpty(){
+function showPlaceholderIfNeeded(){
     var emptyText = document.getElementById("empty-placeholder"),
         hideBlock = document.getElementById("hide-block");
 
