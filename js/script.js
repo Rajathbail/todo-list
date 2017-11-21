@@ -4,33 +4,68 @@ var openListPrefix = "list-",
     inputPrefix = "inp-";
 
 var todoList = [],
-    closedTodoList = []
+    closedTodoList = [],
+    hideCompletedFlag = true;
 
-//Show placeholder if needed
-showPlaceholderIfNeeded();
+//read from local storage
+localforage.getItem("todoList",function(err, value) {
+    if (err) {
+        console.log("error in getting todoList");
+    } else {
+        todoList = value || [];
+    }
+    localforage.getItem("closedTodoList",function(err, value) {
+        if (err || !value) {
+            console.log("error in getting closedTodoList or no value");
+        } else {
+            closedTodoList = value;
+        }
+        localforage.getItem("hideCompletedFlag",function(err, value) {
+            if (err) {
+                console.log("error in getting hideCompletedFlag")
+            } else {
+                hideCompletedFlag = value || false;
+            }
+            //get hide completed and apply to checkbox
+            document.getElementById("show-checkbox").checked = hideCompletedFlag;
 
-//Populate from db
-for (var i = todoList.length - 1; i>=0; i--){
-    addListItem("open-items", todoList[i].todoText, todoList[i]["id"])
-}
+            //Show placeholder if needed
+            showPlaceholderIfNeeded();
 
-for (var i = closedTodoList.length - 1; i>=0; i--){
-    addListItem("closed-items", closedTodoList[i].todoText, closedTodoList[i]["id"])
-}
+            //Populate from db
+            for (var i = todoList.length - 1; i>=0; i--){
+                addListItem("open-items", todoList[i].todoText, todoList[i]["id"])
+            }
+
+            for (var i = closedTodoList.length - 1; i>=0; i--){
+                addListItem("closed-items", closedTodoList[i].todoText, closedTodoList[i]["id"])
+            }
+
+            hideUnhideCompleted();
+        })
+    })
+})
 
 //Add button handler
 function addTodo(id){
-    var ele = document.getElementById(id)
+    var ele = document.getElementById(id),
+        id = Date.now()
     //console.log("The text of the input element is " + ele.value);
     if (!ele.value) {
         return false;
     }
-    addListItem("open-items", ele.value, Date.now());
+    addListItem("open-items", ele.value, id);
     todoList.unshift({
-        id: Date.now(),
+        id: id,
         todoText: ele.value,
         completed: false
     })
+    localforage.setItem("todoList", todoList, function(err){
+        if (err) {
+            console.log("error in writing todoList to local storage");
+        }
+    })
+
     showPlaceholderIfNeeded();
     return false;
 }
@@ -71,16 +106,19 @@ function removeItem(listName, id) {
         el,
         idText,
         len,
-        killList;
+        killList,
+        killListName;
 
     if (listName == "open-items") {
         len = todoList.length;
         killList = todoList;
         idText = openListPrefix;
+        killListName = "todoList";
     } else {
         len = closedTodoList.length;
         killList = closedTodoList;
         idText = closedListPrefix;
+        killListName = "closedTodoList";
     }
 
     el = document.getElementById(idText + id);
@@ -92,6 +130,11 @@ function removeItem(listName, id) {
             break;
         }
     }
+    localforage.setItem(killListName, killList, function(err){
+        if (err) {
+            console.log("error in writing " + killListName + " to local storage");
+        }
+    })
     showPlaceholderIfNeeded();
 }
 
@@ -116,6 +159,17 @@ function justChecked(listName, id){
             break;
         }
     }
+    localforage.setItem("todoList", todoList, function(err){
+        if (err) {
+            console.log("error in writing todoList to local storage");
+        }
+    })
+    localforage.setItem("closedTodoList", closedTodoList, function(err){
+        if (err) {
+            console.log("error in writing closedTodoList to local storage");
+        }
+    })
+
 }
 
 function hideUnhideCompleted(){
@@ -127,6 +181,11 @@ function hideUnhideCompleted(){
     } else {
         todoListCompletedNode.classList.remove("hide");
     }
+    localforage.setItem("hideCompletedFlag", flag, function(err){
+        if (err) {
+            console.log("error in writing hide completed to local storage");
+        }
+    })
 }
 
 function showPlaceholderIfNeeded(){
